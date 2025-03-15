@@ -42,6 +42,8 @@ Here's a glimpse of BestFriend AI in action:
 - **Real-time Responses**: Experience fluid conversation with minimal latency
 - **Intuitive Chat Management**: Easily create, navigate, and delete conversations
 - **Clean, Distraction-free Interface**: Focus on your conversation without unnecessary clutter
+- **Advanced Message Editing**: Edit your previous messages and watch as the AI regenerates contextually appropriate responses
+- **Conversation Management**: Easily delete unwanted conversations with a simple click, keeping your chat history organized
 
 ### 🔧 Getting Started
 
