@@ -7,6 +7,12 @@
 }
 
 :root {
+  --font-size-small: 14px;
+  --font-size-normal: 16px;
+  --font-size-medium: 18px;
+  --font-size-large: 20px;
+  --font-size-xlarge: 24px;
+  
   --primary-color: #00b8a9; /* Bluish green */
   --primary-dark: #008e82;
   --secondary-color: #6a4c93; /* Purple */
@@ -16,22 +22,57 @@
   --gray-color: #e0e0e0;
   --text-dark: #333;
   --text-light: #fff;
-  --font-size-small: 14px;
-  --font-size-normal: 16px;
-  --font-size-medium: 18px;
-  --font-size-large: 20px;
-  --font-size-xlarge: 24px;
+  
+  /* Light theme (default) */
+  --bg-main: var(--light-color);
+  --bg-sidebar: var(--dark-color);
+  --bg-chat-list: rgba(26, 26, 46, 0.9);
+  --bg-input: rgba(240, 247, 244, 0.95);
+  --text-color: var(--text-dark);
+  --border-color: #444;
+  --message-user-bg: rgba(106, 76, 147, 0.1);
+  --message-assistant-bg: rgba(0, 184, 169, 0.1);
+  --message-user-color: var(--dark-color);
+  --message-assistant-color: var(--text-dark);
+  --empty-state-color: var(--text-dark);
+  --chat-item-hover: rgba(0, 184, 169, 0.1);
+  --chat-item-active: rgba(0, 184, 169, 0.2);
+}
+
+/* Dark theme */
+body.dark-mode {
+  --bg-main: #121212;
+  --bg-sidebar: #1e1e30;
+  --bg-chat-list: #1e1e30;
+  --bg-input: #2d2d3a;
+  --text-color: var(--text-light);
+  --border-color: #444;
+  --message-user-bg: rgba(106, 76, 147, 0.2);
+  --message-assistant-bg: rgba(0, 184, 169, 0.2);
+  --message-user-color: #e0e0e0;
+  --message-assistant-color: #e0e0e0;
+  --empty-state-color: #e0e0e0;
+  --chat-item-hover: rgba(0, 184, 169, 0.2);
+  --chat-item-active: rgba(0, 184, 169, 0.3);
+}
+
+/* Apply theme variables to all elements */
+body {
+  color: var(--text-color);
+  background-color: var(--bg-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .app-container {
   display: flex;
   height: 100vh;
+  background-color: var(--bg-main);
 }
 
 .sidebar {
   width: 300px;
-  background-color: var(--dark-color);
-  border-right: 1px solid #444;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -39,7 +80,7 @@
 
 .sidebar-header {
   padding: 20px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .sidebar-header h2 {
@@ -50,7 +91,34 @@
   letter-spacing: 0.5px;
 }
 
+/* Add styles for the sidebar actions */
+.sidebar-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+#theme-toggle-btn {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#theme-toggle-btn:hover {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+}
+
 #new-chat-btn {
+  flex: 1;
   width: 100%;
   padding: 10px;
   background-color: var(--primary-color);
@@ -76,7 +144,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  background-color: rgba(26, 26, 46, 0.9);
+  background-color: var(--bg-chat-list);
 }
 
 /* Chat item styles */
@@ -94,11 +162,11 @@
 }
 
 .chat-item:hover {
-  background-color: rgba(0, 184, 169, 0.1);
+  background-color: var(--chat-item-hover);
 }
 
 .chat-item.active {
-  background-color: rgba(0, 184, 169, 0.2);
+  background-color: var(--chat-item-active);
   border-left: 3px solid var(--primary-color);
 }
 
@@ -145,143 +213,45 @@
   opacity: 1;
 }
 
+/* Update the main content and chat container to use theme variables */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f0f7f4;
+  background-color: var(--bg-main);
+  transition: background-color 0.3s ease;
 }
 
 .chat-container {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
-  background-color: var(--light-color);
+  background-color: var(--bg-main);
+  transition: background-color 0.3s ease;
 }
 
-.message {
-  position: relative;
-  margin-bottom: 15px;
-  padding: 14px 18px;
-  border-radius: 10px;
-  max-width: 80%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  font-size: var(--font-size-medium);
-  line-height: 1.5;
-}
-
-.message-actions {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  opacity: 0;
-  transition: opacity 0.2s;
-  display: flex;
-  gap: 4px;
-}
-
-.message:hover .message-actions {
-  opacity: 1;
-}
-
-/* Button styling */
-.edit-button, 
-button[data-action="edit"], 
-.save-button, 
-button[data-action="save"] {
-  padding: 4px 8px;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-}
-
-.edit-button, 
-button[data-action="edit"] {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-}
-
-.edit-button:hover, 
-button[data-action="edit"]:hover {
-  background-color: var(--primary-dark);
-}
-
-.save-button, 
-button[data-action="save"] {
-  background-color: var(--secondary-color);
-  color: white;
-  border: none;
-}
-
-.save-button:hover, 
-button[data-action="save"]:hover {
-  background-color: var(--secondary-dark);
-}
-
-/* Material Icons styling */
-.edit-button .material-icons,
-button[data-action="edit"] .material-icons {
-  font-size: 16px;
-}
-
-.save-button .material-icons,
-button[data-action="save"] .material-icons {
-  font-size: 16px;
-}
-
-/* Remove emoji content */
-.edit-button::before,
-button[data-action="edit"]::before,
-.save-button::before,
-button[data-action="save"]::before {
-  content: none;
-}
-
-.edit-textarea {
-  width: 100%;
-  min-height: 60px;
-  padding: 10px;
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
-  font-family: inherit;
-  font-size: var(--font-size-medium);
-  resize: vertical;
-  background-color: rgba(240, 247, 244, 0.95);
-  line-height: 1.5;
-}
-
-.edit-textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 184, 169, 0.2);
-}
-
+/* Update message styles to use theme variables */
 .user-message {
-  background-color: rgba(106, 76, 147, 0.1);
+  background-color: var(--message-user-bg);
   margin-left: auto;
-  color: var(--dark-color);
+  color: var(--message-user-color);
   border-left: 3px solid var(--secondary-color);
 }
 
 .assistant-message {
-  background-color: rgba(0, 184, 169, 0.1);
+  background-color: var(--message-assistant-bg);
   margin-right: auto;
-  color: var(--text-dark);
+  color: var(--message-assistant-color);
   border-left: 3px solid var(--primary-color);
 }
 
+/* Update input container to use theme variables */
 .input-container {
   display: flex;
   padding: 15px;
-  border-top: 1px solid #ddd;
-  background-color: var(--dark-color);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-sidebar);
+  transition: background-color 0.3s ease;
 }
 
 #user-input {
@@ -293,42 +263,20 @@ button[data-action="save"]::before {
   height: 70px;
   font-size: var(--font-size-medium);
   outline: none;
-  transition: border-color 0.3s;
-  background-color: rgba(240, 247, 244, 0.95);
+  transition: all 0.3s ease;
+  background-color: var(--bg-input);
+  color: var(--text-color);
   line-height: 1.5;
 }
 
-#user-input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(0, 184, 169, 0.2);
-}
-
-#send-btn {
-  margin-left: 10px;
-  width: 50px;
-  height: 50px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s;
-}
-
-#send-btn:hover {
-  background-color: var(--primary-dark);
-}
-
+/* Update empty state to use theme variables */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: var(--text-dark);
+  color: var(--empty-state-color);
   text-align: center;
   padding: 20px;
 }

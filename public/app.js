@@ -5,9 +5,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
   const sendBtn = document.getElementById('send-btn');
   const newChatBtn = document.getElementById('new-chat-btn');
+  const themeToggleBtn = document.getElementById('theme-toggle-btn');
   
   // Current chat ID
   let currentChatId = null;
+  
+  // Check for saved theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggleBtn.innerHTML = '<span class="material-icons">light_mode</span>';
+  }
+  
+  // Theme toggle functionality
+  themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    
+    // Update button icon
+    if (document.body.classList.contains('dark-mode')) {
+      themeToggleBtn.innerHTML = '<span class="material-icons">light_mode</span>';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggleBtn.innerHTML = '<span class="material-icons">dark_mode</span>';
+      localStorage.setItem('theme', 'light');
+    }
+  });
   
   // Load chat history
   loadChatHistory();
