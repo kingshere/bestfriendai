@@ -136,4 +136,63 @@ router.delete('/chats/:id', async (req, res, next) => {
   }
 });
 
+// Add this new route to your existing routes
+
+// Update a specific message in a chat
+router.put('/chats/:id/messages/:index', async (req, res, next) => {
+  try {
+    const { content } = req.body;
+    const chatId = req.params.id;
+    const messageIndex = parseInt(req.params.index);
+    
+    if (!content) {
+      return res.status(400).json({ message: 'Message content is required' });
+    }
+    
+    // Find the chat
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ message: 'Chat not found' });
+    }
+    
+    // Check if message index is valid
+    if (messageIndex < 0 || messageIndex >= chat.messages.length) {
+      return res.status(400).json({ message: 'Invalid message index' });
+    }
+    
+    // Check if it's a user message (only allow editing user messages)
+    if (chat.messages[messageIndex].role !== 'user') {
+      return res.status(403).json({ message: 'Can only edit user messages' });
+    }
+    
+    // Update the message content
+    chat.messages[messageIndex].content = content;
+    
+    // If this isn't the last message, we need to regenerate AI responses
+    if (messageIndex < chat.messages.length - 1) {
+      // Remove all messages after the edited one
+      chat.messages = chat.messages.slice(0, messageIndex + 1);
+      
+      try {
+        // Get response from Gemini
+        const result = await model.generateContent(content);
+        const response = result.response.text();
+        
+        // Add AI response
+        chat.messages.push({ role: 'assistant', content: response });
+      } catch (error) {
+        console.error('Error with Gemini API:', error);
+        return res.status(500).json({ 
+          message: 'Error processing your request',
+          error: error.message
+        });
+      }
+    }
+    
+    const updatedChat = await chat.save();
+    res.json(updatedChat);
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;

@@ -96,10 +96,96 @@ document.addEventListener('DOMContentLoaded', () => {
   function displayMessages(messages) {
     chatContainer.innerHTML = '';
     
-    messages.forEach(message => {
+    messages.forEach((message, index) => {
       const messageElement = document.createElement('div');
       messageElement.className = `message ${message.role}-message`;
-      messageElement.textContent = message.content;
+      
+      // Create message content container
+      const contentElement = document.createElement('div');
+      contentElement.className = 'message-content';
+      contentElement.textContent = message.content;
+      
+      messageElement.appendChild(contentElement);
+      
+      // Only add edit button to user messages
+      if (message.role === 'user') {
+        const actionsElement = document.createElement('div');
+        actionsElement.className = 'message-actions';
+        
+        const editButton = document.createElement('button');
+        editButton.className = 'edit-button';
+        editButton.innerHTML = '<span class="material-icons">edit</span>';
+        editButton.title = 'Edit message';
+        
+        editButton.addEventListener('click', () => {
+          // Create edit mode
+          const editArea = document.createElement('textarea');
+          editArea.className = 'edit-textarea';
+          editArea.value = message.content;
+          
+          // Replace content with textarea
+          contentElement.innerHTML = '';
+          contentElement.appendChild(editArea);
+          
+          // Add save button
+          const saveButton = document.createElement('button');
+          saveButton.className = 'save-button';
+          saveButton.innerHTML = '<span class="material-icons">check</span>';
+          saveButton.title = 'Save changes';
+          
+          // Replace edit button with save button
+          actionsElement.innerHTML = '';
+          actionsElement.appendChild(saveButton);
+          
+          // Focus textarea
+          editArea.focus();
+          
+          // Save edited message
+          saveButton.addEventListener('click', async () => {
+            const newContent = editArea.value.trim();
+            
+            if (newContent && newContent !== message.content) {
+              try {
+                const response = await fetch(`/api/chats/${currentChatId}/messages/${index}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ content: newContent })
+                });
+                
+                if (response.ok) {
+                  // Reload the chat to show updated messages
+                  loadChat(currentChatId);
+                } else {
+                  throw new Error('Failed to update message');
+                }
+              } catch (error) {
+                console.error('Error updating message:', error);
+                alert('Failed to update message. Please try again.');
+              }
+            } else {
+              // If no changes or empty content, just exit edit mode
+              contentElement.textContent = message.content;
+              actionsElement.innerHTML = '';
+              actionsElement.appendChild(editButton);
+            }
+          });
+          
+          // Cancel edit on Escape key
+          editArea.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+              contentElement.textContent = message.content;
+              actionsElement.innerHTML = '';
+              actionsElement.appendChild(editButton);
+            }
+          });
+        });
+        
+        actionsElement.appendChild(editButton);
+        messageElement.appendChild(actionsElement);
+      }
+      
       chatContainer.appendChild(messageElement);
     });
     
