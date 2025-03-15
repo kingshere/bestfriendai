@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Chat = require('../models/Chat');
+const Message = require('../models/Message');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const mongoose = require('mongoose');
 
 // Initialize Gemini API
 if (!process.env.GEMINI_API_KEY) {
@@ -123,16 +125,24 @@ router.post('/chats/:id/messages', async (req, res, next) => {
   }
 });
 
+// Add or update this route in your chatRoutes.js file
+
 // Delete a chat
-router.delete('/chats/:id', async (req, res, next) => {
+router.delete('/chats/:id', async (req, res) => {
   try {
-    const chat = await Chat.findByIdAndDelete(req.params.id);
-    if (!chat) {
-      return res.status(404).json({ message: 'Chat not found' });
+    const chatId = req.params.id;
+    
+    // Find and delete the chat
+    const deletedChat = await Chat.findByIdAndDelete(chatId);
+    
+    if (!deletedChat) {
+      return res.status(404).json({ error: 'Chat not found' });
     }
-    res.json({ message: 'Chat deleted successfully', deletedChatId: req.params.id });
+    
+    res.status(200).json({ success: true, message: 'Chat deleted successfully' });
   } catch (error) {
-    next(error);
+    console.error('Error deleting chat:', error);
+    res.status(500).json({ error: 'Failed to delete chat' });
   }
 });
 

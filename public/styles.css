@@ -58,28 +58,49 @@
   padding: 10px;
 }
 
+/* Add these styles for the delete button */
 .chat-item {
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-  cursor: pointer;
+  position: relative;
   display: flex;
   align-items: center;
-  transition: background-color 0.2s;
+  justify-content: space-between;
 }
 
-.chat-item:hover {
-  background-color: #f0f7ff;
+.chat-item-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.chat-item.active {
-  background-color: #e3f2fd;
-  border-left: 3px solid #1976d2;
+.chat-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
 }
 
-.chat-item .material-icons {
-  margin-right: 10px;
-  color: #757575;
+.delete-chat-btn {
+  opacity: 0;
+  background: none;
+  border: none;
+  color: #f44336;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.delete-chat-btn:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.chat-item:hover .delete-chat-btn {
+  opacity: 1;
 }
 
 .main-content {

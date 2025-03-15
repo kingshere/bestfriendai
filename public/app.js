@@ -48,21 +48,38 @@ document.addEventListener('DOMContentLoaded', () => {
         chatItem.className = 'chat-item';
         chatItem.dataset.id = chat._id;
         
+        // Create chat item content div
+        const chatItemContent = document.createElement('div');
+        chatItemContent.className = 'chat-item-content';
+        
         const icon = document.createElement('span');
         icon.className = 'material-icons';
         icon.textContent = 'chat';
         
         const title = document.createElement('span');
-        title.style.overflow = 'hidden';
-        title.style.textOverflow = 'ellipsis';
-        title.style.whiteSpace = 'nowrap';
-        title.style.flex = '1';
-        title.textContent = chat.title;
+        title.className = 'chat-title';
+        title.textContent = chat.title || 'New Chat';
         
-        chatItem.appendChild(icon);
-        chatItem.appendChild(title);
+        chatItemContent.appendChild(icon);
+        chatItemContent.appendChild(title);
         
-        chatItem.addEventListener('click', () => loadChat(chat._id));
+        // Create delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-chat-btn';
+        deleteBtn.innerHTML = '<span class="material-icons">delete</span>';
+        deleteBtn.title = 'Delete chat';
+        
+        // Add event listeners
+        chatItemContent.addEventListener('click', () => loadChat(chat._id));
+        
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteChat(chat._id);
+        });
+        
+        // Append elements to chat item
+        chatItem.appendChild(chatItemContent);
+        chatItem.appendChild(deleteBtn);
         
         chatList.appendChild(chatItem);
       });
@@ -355,33 +372,57 @@ document.addEventListener('DOMContentLoaded', () => {
     showEmptyState();
   }
   
-  // Add delete functionality for chats
-  chatList.addEventListener('contextmenu', async (e) => {
-    e.preventDefault();
+  async function deleteChat(chatId) {
+    if (!confirm('Are you sure you want to delete this chat?')) {
+      return;
+    }
     
-    // Check if right-clicked on a chat item
-    if (e.target.classList.contains('chat-item')) {
-      const chatId = e.target.dataset.id;
+    try {
+      // Show loading state or disable the button
+      const deleteBtn = document.querySelector(`.delete-chat-btn[data-id="${chatId}"]`);
+      if (deleteBtn) {
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = '<span class="material-icons">hourglass_empty</span>';
+      }
       
-      if (confirm('Delete this chat?')) {
-        try {
-          const response = await fetch(`/api/chats/${chatId}`, {
-            method: 'DELETE'
-          });
-          
-          if (response.ok) {
-            // If the deleted chat was the current one, reset the view
-            if (chatId === currentChatId) {
-              startNewChat();
-            }
-            
-            // Refresh chat history
-            loadChatHistory();
-          }
-        } catch (error) {
-          console.error('Error deleting chat:', error);
+      const response = await fetch(`/api/chats/${chatId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
         }
+      });
+      
+      // Parse the response as JSON if possible
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = await response.text();
+      }
+      
+      if (response.ok) {
+        // If the deleted chat was the current one, reset the view
+        if (chatId === currentChatId) {
+          currentChatId = null;
+          showEmptyState();
+        }
+        
+        // Refresh chat history
+        loadChatHistory();
+      } else {
+        console.error('Failed to delete chat:', errorData);
+        alert(`Failed to delete chat: ${errorData.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+      alert('An error occurred while deleting the chat.');
+    } finally {
+      // Reset the delete button if it exists
+      const deleteBtn = document.querySelector(`.delete-chat-btn[data-id="${chatId}"]`);
+      if (deleteBtn) {
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = '<span class="material-icons">delete</span>';
       }
     }
-  });
-});
+  }
+})

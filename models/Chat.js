@@ -19,7 +19,7 @@ const messageSchema = new mongoose.Schema({
 const chatSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    default: 'New Chat'
   },
   messages: [messageSchema],
   createdAt: {
