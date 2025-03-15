@@ -33,11 +33,34 @@ document.addEventListener('DOMContentLoaded', () => {
       
       chatList.innerHTML = '';
       
+      if (chats.length === 0) {
+        const emptyItem = document.createElement('div');
+        emptyItem.className = 'chat-item';
+        emptyItem.style.color = '#757575';
+        emptyItem.style.justifyContent = 'center';
+        emptyItem.textContent = 'No chats yet';
+        chatList.appendChild(emptyItem);
+        return;
+      }
+      
       chats.forEach(chat => {
         const chatItem = document.createElement('div');
         chatItem.className = 'chat-item';
         chatItem.dataset.id = chat._id;
-        chatItem.textContent = chat.title;
+        
+        const icon = document.createElement('span');
+        icon.className = 'material-icons';
+        icon.textContent = 'chat';
+        
+        const title = document.createElement('span');
+        title.style.overflow = 'hidden';
+        title.style.textOverflow = 'ellipsis';
+        title.style.whiteSpace = 'nowrap';
+        title.style.flex = '1';
+        title.textContent = chat.title;
+        
+        chatItem.appendChild(icon);
+        chatItem.appendChild(title);
         
         chatItem.addEventListener('click', () => loadChat(chat._id));
         
@@ -192,6 +215,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  function showEmptyState() {
+    chatContainer.innerHTML = `
+      <div class="empty-state">
+        <span class="material-icons">chat</span>
+        <h3>BestFriend AI</h3>
+        <p>Ask me anything and I'll do my best to help! Your conversations will be saved for future reference.</p>
+      </div>
+    `;
+  }
+  
   function showUserMessage(message) {
     const messageElement = document.createElement('div');
     messageElement.className = 'message user-message';
@@ -222,15 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
     chatContainer.scrollTop = chatContainer.scrollHeight;
     
     return loadingElement;
-  }
-  
-  function showEmptyState() {
-    chatContainer.innerHTML = `
-      <div class="empty-state">
-        <h3>BestFriend AI</h3>
-        <p>Ask me anything and I'll do my best to help!</p>
-      </div>
-    `;
   }
   
   function startNewChat() {

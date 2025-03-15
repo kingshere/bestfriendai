@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BestFriend AI</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,7 +13,10 @@
     <div class="sidebar">
       <div class="sidebar-header">
         <h2>BestFriend AI</h2>
-        <button id="new-chat-btn">New Chat</button>
+        <button id="new-chat-btn">
+          <span class="material-icons">add</span>
+          New Chat
+        </button>
       </div>
       <div class="chat-list" id="chat-list">
         <!-- Chat history will be populated here -->
@@ -23,7 +28,9 @@
       </div>
       <div class="input-container">
         <textarea id="user-input" placeholder="Ask me anything..."></textarea>
-        <button id="send-btn">Send</button>
+        <button id="send-btn">
+          <span class="material-icons">send</span>
+        </button>
       </div>
     </div>
   </div>
