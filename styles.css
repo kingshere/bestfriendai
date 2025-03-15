@@ -1,0 +1,37 @@
+/* ... existing code ... */
+
+.edit-button, .save-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 5px;
+}
+
+.edit-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+}
+
+.edit-button:hover {
+  background-color: #357abd;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.save-button {
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+}
+
+.save-button:hover {
+  background-color: #449d44;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+/* ... existing code ... */

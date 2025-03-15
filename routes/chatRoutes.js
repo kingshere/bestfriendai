@@ -130,7 +130,7 @@ router.delete('/chats/:id', async (req, res, next) => {
     if (!chat) {
       return res.status(404).json({ message: 'Chat not found' });
     }
-    res.json({ message: 'Chat deleted successfully' });
+    res.json({ message: 'Chat deleted successfully', deletedChatId: req.params.id });
   } catch (error) {
     next(error);
   }

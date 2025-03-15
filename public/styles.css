@@ -117,24 +117,63 @@
   opacity: 1;
 }
 
-.edit-button, .save-button {
-  background: none;
-  border: none;
+/* Enhanced styling for edit and save buttons */
+.edit-button, 
+button[data-action="edit"], 
+.save-button, 
+button[data-action="save"] {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 2px;
-  border-radius: 50%;
-  display: flex;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin: 4px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.edit-button:hover, .save-button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+.edit-button, 
+button[data-action="edit"] {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
 }
 
-.edit-button .material-icons, .save-button .material-icons {
-  font-size: 16px;
-  color: #555;
+.edit-button:hover, 
+button[data-action="edit"]:hover {
+  background-color: #357abd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.save-button, 
+button[data-action="save"] {
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+}
+
+.save-button:hover, 
+button[data-action="save"]:hover {
+  background-color: #449d44;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Simpler icons for buttons */
+.edit-button::before,
+button[data-action="edit"]::before {
+  content: "✏️";
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.save-button::before,
+button[data-action="save"]::before {
+  content: "💾";
+  font-size: 12px;
+  margin-right: 4px;
 }
 
 .edit-textarea {
