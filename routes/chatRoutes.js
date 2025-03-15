@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Chat = require('../models/Chat');
-const Message = require('../models/Message');
+// Remove the Message import since it's not being used
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const mongoose = require('mongoose');
 

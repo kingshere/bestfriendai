@@ -26,6 +26,15 @@ Powered by Google's Gemini AI, the application delivers intelligent, context-awa
 - **Interactive Elements**: Subtle animations and transitions enhance the user experience
 - **Accessibility Focus**: Designed with accessibility in mind for all users
 
+### 📸 Screenshots
+
+Here's a glimpse of BestFriend AI in action:
+
+#### Chat Interface
+![Dark Mode Chat Interface](./Screenshots/ok.png)
+![Dark Mode Chat Interface](./Screenshots/vk.png)
+
+
 ### ✨ Key Features
 
 - **Theme Customization**: Toggle between light and dark modes to suit your preference
